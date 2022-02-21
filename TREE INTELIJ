@@ -1,0 +1,151 @@
+package com.company;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class binaryTreeYT {
+    static class Node{
+        int data;
+        Node left;
+        Node right;
+
+        Node(int data){
+            this.data=data;
+            this.left=null;
+            this.right=null;
+        }
+    }
+     static class binaryTree{
+        static int idx=-1;
+        public static Node buildTree(int []nodes){
+            idx++;
+            if(nodes[idx]==-1){
+                return null;
+            }
+            Node newNode=new Node(nodes[idx]);
+            newNode.left=buildTree(nodes);
+            newNode.right=buildTree(nodes);
+
+            return newNode;
+        }
+    }
+    //PREORDER READING
+    public static void preorder(Node root){
+        if (root==null) {
+//            System.out.println("-1 ");
+            return;
+        }
+        System.out.print(root.data+" ");
+        preorder(root.left);
+        preorder(root.right);
+    }
+    //INORDER READING
+    public static void inorder(Node root){
+        if (root==null){
+            return;
+        }
+        inorder(root.left);
+        System.out.print(root.data+" ");
+        inorder(root.right);
+    }
+    //POSTORDER READING
+    public static void postorder(Node root){
+        if (root==null) return ;
+        postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.data+" ");
+    }
+    //LEVEL ORDER
+    public static void levelorder(Node root){
+        if (root==null) return;
+        Queue<Node> q=new LinkedList<>();
+        q.add(root);
+        q.add(null);
+        while (!q.isEmpty()){
+            Node curr = q.remove();
+            if (curr==null) {
+                System.out.println();
+                if (q.isEmpty()) break;
+                else {
+                    q.add(null);
+                }
+            }
+            else {
+                System.out.print(curr.data+" ");
+                if (curr.left!=null)  q.add(curr.left);
+                if (curr.right!=null) q.add(curr.right);
+            }
+        }
+    }
+    //COUNT NO OF NODES
+    public static int count(Node root){
+        if (root==null) return 0;
+        int x=count(root.left);
+        int y=count(root.right);
+        return x+y+1;
+    }
+    //SUM OF NODES
+    public static int sum(Node root){
+        if (root==null) return 0;
+        int left=sum(root.left);
+        int right=sum(root.right);
+        return left+right+root.data;
+    }
+    //HEIGHT OF TREE
+    public static int height(Node root){
+        if (root==null) return 0;
+        int left=height(root.left);
+        int right=height(root.right);
+        if (left>right) return left+1;
+        else return right+1;
+    }
+    //DIAMETER(N^2)
+    public static int diameter(Node root){
+        if (root==null) return 0;
+        int d1=diameter(root.left);
+        int d2=diameter(root.right);
+        int d3=height(root.left)+height(root.right)+1;
+        return Math.max(d3, Math.max(d1, d2));
+    }
+    //DIAMETER(N)
+    static class treeInfo{
+        int ht;
+        int dia;
+
+        treeInfo(int ht,int dia){
+            this.dia=dia;
+            this.ht=ht;
+        }
+    }
+    public static treeInfo diameter2(Node root){
+        if (root==null) return new treeInfo(0,0);
+        treeInfo left= diameter2 (root.left);
+        treeInfo right=diameter2(root.right);
+        int height=Math.max(left.ht, right.ht)+1;
+        int d1= left.dia;
+        int d2=right.dia;
+        int d3= left.ht + right.ht+1;
+        int d=Math.max(d3,Math.max(d1,d2));
+        return new treeInfo(height,d);
+
+    }
+
+    public static void main(String[] args) {
+        int nodes[]={1,2,3,-1,-1,6,-1,-1,4,-1,7,-1,-1};
+        binaryTree tree=new binaryTree();
+        Node root=tree.buildTree(nodes);
+//        System.out.println(root.data);
+        preorder(root);
+        System.out.println();
+        inorder(root);
+        System.out.println();
+        postorder(root);
+        System.out.println();
+        levelorder(root);
+        System.out.println(count(root));
+        System.out.println(sum(root));
+        System.out.println(height(root));
+        System.out.println(diameter(root));
+        System.out.println(diameter2(root).dia);
+        System.out.println(diameter2(root).ht);
+    }
+}
