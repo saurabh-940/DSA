@@ -1,0 +1,12 @@
+Node findlca(Node root,int a,int b){
+        if(root==null) return null;
+        if(root.data==a || root.data==b) return root;
+        
+        int l=findlca(root.left,a,b);
+        int r=findlca(root.right,a,b);
+        
+        if(l!=null && r!=null) return root;
+        else if(l!=null && r==null) return l;
+        else if(l==null && r!=null) return r;
+        else return null;
+    }
